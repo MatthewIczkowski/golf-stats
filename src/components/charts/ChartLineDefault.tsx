@@ -46,7 +46,7 @@ export function ChartLineDefault() {
         <CardTitle>Scoring Average</CardTitle>
         <CardDescription>January - November 2025</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 p-4">
+      <CardContent className="flex-1">
         <ChartContainer config={chartConfig} className="w-full h-full sm:aspect-auto">
           <LineChart
             accessibilityLayer

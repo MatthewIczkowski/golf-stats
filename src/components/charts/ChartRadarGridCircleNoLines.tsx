@@ -35,11 +35,11 @@ const chartConfig = {
 
 export function ChartRadarGridCircleNoLines() {
   return (
-    <Card className="max-w-full  max-h-96 p-4">
-      <CardHeader className="items-center pb-4">
+    <Card className="max-w-full max-h-96 pt-4">
+      <CardHeader className="items-center">
         <CardTitle>Skill Profile</CardTitle>
       </CardHeader>
-      <CardContent className="p-4">
+      <CardContent className="p-4 pt-0">
         <ChartContainer
           config={chartConfig}
           className="w-full h-full"
