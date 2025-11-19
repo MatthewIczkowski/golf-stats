@@ -1,5 +1,6 @@
 "use client"
 
+import { TrendingDown } from "lucide-react"
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts"
 
 import {
@@ -35,7 +36,7 @@ const chartConfig = {
 
 export function ChartRadarGridCircleNoLines() {
   return (
-    <Card className="max-w-full max-h-96 pt-4">
+    <Card className="max-w-full h-full flex flex-col">
       <CardHeader className="items-center">
         <CardTitle>Skill Profile</CardTitle>
       </CardHeader>
@@ -63,13 +64,14 @@ export function ChartRadarGridCircleNoLines() {
           </RadarChart>
         </ChartContainer>
       </CardContent>
-      {/* <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 leading-none font-medium">
-          Trending up by 5.2% this month
+      <CardFooter className="flex-col items-center gap-2 text-sm">
+        <div className="flex gap-2 leading-none font-medium">
+          Trending down by 5.2% this month <TrendingDown className="h-4 w-4" />
         </div>
-        <div className="text-muted-foreground flex items-center gap-2 leading-none">
+        <div className="text-muted-foreground leading-none">
+          Showing total scores for the last 6 months
         </div>
-      </CardFooter> */}
+      </CardFooter>
     </Card>
   )
 }

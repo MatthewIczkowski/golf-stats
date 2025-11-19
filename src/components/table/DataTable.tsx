@@ -9,77 +9,72 @@ import {
     TableRow,
   } from "@/components/ui/table"
   
-  const invoices = [
+  const rounds = [
     {
-      invoice: "INV001",
-      paymentStatus: "Paid",
-      totalAmount: "$250.00",
-      paymentMethod: "Credit Card",
+      round: "0001",
+      date: "10-19-2025",
+      course: "Pinehurst #1",
+      par: "72",
+      score: "81",
     },
     {
-      invoice: "INV002",
-      paymentStatus: "Pending",
-      totalAmount: "$150.00",
-      paymentMethod: "PayPal",
+      round: "0002",
+      date: "10-20-2025",
+      course: "Pebble Beach",
+      par: "72",
+      score: "73",
     },
     {
-      invoice: "INV003",
-      paymentStatus: "Unpaid",
-      totalAmount: "$350.00",
-      paymentMethod: "Bank Transfer",
+      round: "0003",
+      date: "10-21-2025",
+      course: "Merion Golf Club",
+      par: "72",
+      score: "75",
     },
     {
-      invoice: "INV004",
-      paymentStatus: "Paid",
-      totalAmount: "$450.00",
-      paymentMethod: "Credit Card",
+      round: "0004",
+        date: "10-30-2025",
+      course: "City Park Golf Course",
+      par: "72",
+      score: "76",
     },
     {
-      invoice: "INV005",
-      paymentStatus: "Paid",
-      totalAmount: "$550.00",
-      paymentMethod: "PayPal",
-    },
-    {
-      invoice: "INV006",
-      paymentStatus: "Pending",
-      totalAmount: "$200.00",
-      paymentMethod: "Bank Transfer",
-    },
-    {
-      invoice: "INV007",
-      paymentStatus: "Unpaid",
-      totalAmount: "$300.00",
-      paymentMethod: "Credit Card",
+      round: "0005",
+      date: "10-23-2025",
+      course: "Willis Case Golf Course",
+      par: "72",
+      score: "74",
     },
   ]
   
   export function DataTable() {
     return (
       <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableCaption>A list of recent scores.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Invoice</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className="w-[100px] font-bold">Round</TableHead>
+            <TableHead className="font-bold">Date</TableHead>
+            <TableHead className="font-bold">Course</TableHead>
+            <TableHead className="font-bold">Par</TableHead>
+            <TableHead className="text-right font-bold">Score</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="font-medium">{invoice.invoice}</TableCell>
-              <TableCell>{invoice.paymentStatus}</TableCell>
-              <TableCell>{invoice.paymentMethod}</TableCell>
-              <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+          {rounds.map((round) => (
+            <TableRow key={round.round}>
+              <TableCell className="font-medium">{round.round}</TableCell>
+              <TableCell>{round.date}</TableCell>
+              <TableCell>{round.course}</TableCell>
+              <TableCell>{round.par}</TableCell>
+              <TableCell className="text-right">{round.score}</TableCell>
             </TableRow>
           ))}
         </TableBody>
         <TableFooter>
           <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
+            <TableCell colSpan={4} className="font-bold">Average</TableCell>
+            <TableCell className="text-right">74.5</TableCell>
           </TableRow>
         </TableFooter>
       </Table>
