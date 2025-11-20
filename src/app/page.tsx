@@ -1,5 +1,10 @@
+"use client"
+
 import Image from "next/image";
 import goat from "../../public/goat.jpg"
+import { useState } from "react";
+
+import { PlusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ChartRadarGridCircleNoLines } from "@/components/charts/ChartRadarGridCircleNoLines";
@@ -7,14 +12,22 @@ import { ChartLineDefault } from "@/components/charts/ChartLineDefault";
 import { DataTable } from "@/components/table/DataTable";
 import { getGolferAge } from "@/lib/utils";
 import { ModeToggle } from "@/components/ModeToggle";
+import { AuthToggle } from "@/components/AuthToggle";
 
 export default function Home() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);  
   const { years, months } = getGolferAge();
   
   return (
     <div className="p-4 sm:p-6"> 
       <div className="hidden sm:flex flex-row justify-end gap-2">
-        <Button variant="outline" size="icon" className="w-auto p-2"> <span> New Round</span> </Button>
+        {isAuthenticated && (
+          <Button variant="outline" size="icon" className="w-auto p-2 font-bold bg-emerald-700 text-white hover:bg-emerald-600 hover:text-white"> 
+            <PlusCircle /> New Round 
+          </Button>
+        )}
+        {/* <Button variant="outline" size="icon" className="w-auto p-2" onClick={() => setIsAuthenticated(!isAuthenticated)}> Auth Logic Test </Button> */}
+        <AuthToggle isAuthenticated={isAuthenticated} />
         <ModeToggle />
       </div> 
       <section className="flex flex-row gap-4 items-center pb-4">
