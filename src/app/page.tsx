@@ -37,7 +37,13 @@ export default function Home() {
           <p className="text-gray-500 text-sm"> age - {years} years, {months} months</p>
           <p className="text-gray-500 text-sm"> started golf - April 2000</p>
           <div className="flex flex-row justify-end gap-2 sm:hidden">
-            <Button variant="outline" size="icon" className="w-auto p-2"> <span> New Round</span> </Button>
+            {isAuthenticated && (
+            <Button variant="outline" size="icon" className="w-auto p-2 font-bold bg-emerald-700 text-white hover:bg-emerald-600 hover:text-white"> 
+              <PlusCircle /> New Round 
+            </Button>
+            )}
+            {/* <Button variant="outline" size="icon" className="w-auto p-2" onClick={() => setIsAuthenticated(!isAuthenticated)}> Auth Logic Test </Button> */}
+            <AuthToggle isAuthenticated={isAuthenticated} />
             <ModeToggle />
           </div> 
         </section>
