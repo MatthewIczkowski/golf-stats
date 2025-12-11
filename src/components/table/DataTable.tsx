@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import {
     Table,
     TableBody,
@@ -8,76 +11,100 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
-  
-  const rounds = [
-    {
-      round: "0001",
-      date: "10-19-2025",
-      course: "Pinehurst #1",
-      par: "72",
-      score: "81",
-    },
-    {
-      round: "0002",
-      date: "10-20-2025",
-      course: "Pebble Beach",
-      par: "72",
-      score: "73",
-    },
-    {
-      round: "0003",
-      date: "10-21-2025",
-      course: "Merion Golf Club",
-      par: "72",
-      score: "75",
-    },
-    {
-      round: "0004",
-        date: "10-30-2025",
-      course: "City Park Golf Course",
-      par: "72",
-      score: "76",
-    },
-    {
-      round: "0005",
-      date: "10-23-2025",
-      course: "Willis Case Golf Course",
-      par: "72",
-      score: "74",
-    },
-  ]
-  
-  export function DataTable() {
+import { getData } from "@/lib/actions";
+
+interface Round {
+  id: string;
+  date: string | Date;
+  course_name: string;
+  slope: string | number;
+  rating: string | number;
+  score: string | number;
+}
+
+function formatDate(date: string | Date): string {
+  if (!date) return "";
+  const dateObj = typeof date === "string" ? new Date(date) : date;
+  return dateObj.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+}
+
+export function DataTable() {
+  const [rounds, setRounds] = useState<Round[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchRounds() {
+      try {
+        const data = await getData();
+        setRounds(data as Round[]);
+      } catch (error) {
+        console.error("Error fetching rounds:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchRounds();
+  }, []);
+
+  const average = rounds.length > 0
+    ? (rounds.reduce((sum, round) => sum + Number(round.score), 0) / rounds.length).toFixed(1)
+    : "0.0";
+
+  if (isLoading) {
     return (
       <Table>
         <TableCaption>A list of recent scores.</TableCaption>
-        <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px] font-bold">Round</TableHead>
-            <TableHead className="font-bold">Date</TableHead>
-            <TableHead className="font-bold">Course</TableHead>
-            <TableHead className="font-bold">Par</TableHead>
-            <TableHead className="text-right font-bold">Score</TableHead>
-          </TableRow>
-        </TableHeader>
         <TableBody>
-          {rounds.map((round) => (
-            <TableRow key={round.round}>
-              <TableCell className="font-medium">{round.round}</TableCell>
-              <TableCell>{round.date}</TableCell>
-              <TableCell>{round.course}</TableCell>
-              <TableCell>{round.par}</TableCell>
+          <TableRow key="loading">
+            <TableCell colSpan={5} className="text-center">Loading...</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    );
+  }
+
+  return (
+    <Table>
+      <TableCaption>A list of recent scores.</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px] font-bold">UUID</TableHead>
+          <TableHead className="font-bold">Date</TableHead>
+          <TableHead className="font-bold">Course</TableHead>
+          <TableHead className="font-bold">Slope</TableHead>
+          <TableHead className="font-bold">Rating</TableHead>
+          <TableHead className="text-right font-bold">Score</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {rounds.length === 0 ? (
+          <TableRow key="empty-state">
+            <TableCell colSpan={5} className="text-center">No rounds found</TableCell>
+          </TableRow>
+        ) : (
+          rounds.map((round, index) => (
+            <TableRow key={round.id || `round-${index}`}>
+              <TableCell className="font-medium">{round.id}</TableCell>
+              <TableCell>{formatDate(round.date)}</TableCell>
+              <TableCell>{round.course_name}</TableCell>
+              <TableCell>{round.slope}</TableCell>
+              <TableCell>{round.rating}</TableCell>
               <TableCell className="text-right">{round.score}</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell colSpan={4} className="font-bold">Average</TableCell>
-            <TableCell className="text-right">74.5</TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
-    )
-  }
+          ))
+        )}
+      </TableBody>
+      <TableFooter>
+        <TableRow>
+          <TableCell colSpan={5} className="font-bold">Average</TableCell>
+          <TableCell className="text-right">{average}</TableCell>
+        </TableRow>
+      </TableFooter>
+    </Table>
+  )
+}
   
