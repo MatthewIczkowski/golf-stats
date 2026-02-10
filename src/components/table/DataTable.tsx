@@ -2,15 +2,15 @@
 
 import { useEffect, useState } from "react";
 import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableFooter,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table"
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { getData } from "@/lib/actions";
 
 interface Round {
@@ -50,17 +50,23 @@ export function DataTable() {
     fetchRounds();
   }, []);
 
-  const average = rounds.length > 0
-    ? (rounds.reduce((sum, round) => sum + Number(round.score), 0) / rounds.length).toFixed(1)
-    : "0.0";
+  const average =
+    rounds.length > 0
+      ? (
+          rounds.reduce((sum, round) => sum + Number(round.score), 0) /
+          rounds.length
+        ).toFixed(1)
+      : "0.0";
 
   if (isLoading) {
     return (
       <Table>
-        <TableCaption>A list of recent scores.</TableCaption>
+        {/*<TableCaption>A list of recent scores.</TableCaption>*/}
         <TableBody>
           <TableRow key="loading">
-            <TableCell colSpan={5} className="text-center">Loading...</TableCell>
+            <TableCell colSpan={2} className="text-center">
+              Loading...
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>
@@ -69,30 +75,32 @@ export function DataTable() {
 
   return (
     <Table>
-      <TableCaption>A list of recent scores.</TableCaption>
+      {/*<TableCaption>A list of recent scores.</TableCaption>*/}
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px] font-bold">UUID</TableHead>
+          {/*<TableHead className="w-[100px] font-bold">UUID</TableHead>*/}
           <TableHead className="font-bold">Date</TableHead>
           <TableHead className="font-bold">Course</TableHead>
-          <TableHead className="font-bold">Slope</TableHead>
-          <TableHead className="font-bold">Rating</TableHead>
+          {/*<TableHead className="font-bold">Slope</TableHead>*/}
+          {/*<TableHead className="font-bold">Rating</TableHead>*/}
           <TableHead className="text-right font-bold">Score</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {rounds.length === 0 ? (
           <TableRow key="empty-state">
-            <TableCell colSpan={5} className="text-center">No rounds found</TableCell>
+            <TableCell colSpan={2} className="text-center">
+              No rounds found
+            </TableCell>
           </TableRow>
         ) : (
           rounds.map((round, index) => (
             <TableRow key={round.id || `round-${index}`}>
-              <TableCell className="font-medium">{round.id}</TableCell>
+              {/*<TableCell className="font-medium">{round.id}</TableCell>*/}
               <TableCell>{formatDate(round.date)}</TableCell>
               <TableCell>{round.course_name}</TableCell>
-              <TableCell>{round.slope}</TableCell>
-              <TableCell>{round.rating}</TableCell>
+              {/*<TableCell>{round.slope}</TableCell>*/}
+              {/*<TableCell>{round.rating}</TableCell>*/}
               <TableCell className="text-right">{round.score}</TableCell>
             </TableRow>
           ))
@@ -100,11 +108,12 @@ export function DataTable() {
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={5} className="font-bold">Average</TableCell>
+          <TableCell colSpan={2} className="font-bold">
+            Average
+          </TableCell>
           <TableCell className="text-right">{average}</TableCell>
         </TableRow>
       </TableFooter>
     </Table>
-  )
+  );
 }
-  
