@@ -29,7 +29,7 @@ export function Header() {
         )}
         {/* <Button variant="outline" size="icon" className="w-auto p-2" onClick={() => setIsAuthenticated(!isAuthenticated)}> Auth Logic Test </Button> */}
         <AuthToggle isAuthenticated={isAuthenticated} />
-        {/*<ModeToggle />*/}
+        <ModeToggle />
       </div>
       <section className="flex flex-row gap-4 items-center pb-4">
         <Image src={goat} alt="goat" width={180} height={180} />

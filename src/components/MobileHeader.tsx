@@ -8,6 +8,7 @@ import { PlusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { AuthToggle } from "@/components/AuthToggle";
+import { ModeToggle } from "@/components/ModeToggle";
 
 export function MobileHeader() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -31,6 +32,7 @@ export function MobileHeader() {
           </Button>
         )}
         <AuthToggle isAuthenticated={isAuthenticated} />
+        <ModeToggle />
       </div>
     </header>
   );
