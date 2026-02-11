@@ -7,6 +7,18 @@ export async function getData() {
   return data;
 }
 
+export async function getPerformanceStats() {
+  const sql = neon(process.env.DATABASE_URL as string);
+  const data = await sql`
+    SELECT
+      ROUND(AVG(fairways_hit)::numeric, 1) AS avg_fairways_hit,
+      ROUND(AVG(greens_in_regulation)::numeric, 1) AS avg_gir,
+      ROUND(AVG(putts)::numeric, 1) AS avg_putts
+    FROM rounds
+  `;
+  return data[0];
+}
+
 export async function createRound(formData: FormData) {
   const sql = neon(process.env.DATABASE_URL as string);
 

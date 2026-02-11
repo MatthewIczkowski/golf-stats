@@ -9,7 +9,10 @@ import { createRound } from "@/lib/actions";
 
 export function RoundForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -23,7 +26,10 @@ export function RoundForm() {
       setMessage({ type: "success", text: "Round added successfully!" });
       (event.target as HTMLFormElement).reset();
     } catch (error) {
-      setMessage({ type: "error", text: "Failed to add round. Please try again." });
+      setMessage({
+        type: "error",
+        text: "Failed to add round. Please try again.",
+      });
       console.error("Error creating round:", error);
     } finally {
       setIsSubmitting(false);
@@ -35,16 +41,11 @@ export function RoundForm() {
       <CardHeader>
         <CardTitle>Add New Round</CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="px-6">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="date">Date</Label>
-            <Input
-              id="date"
-              name="date"
-              type="date"
-              required
-            />
+            <Input id="date" name="date" type="date" required />
           </div>
 
           <div className="space-y-2">
@@ -154,7 +155,7 @@ export function RoundForm() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="double_bogeys">Double Bogeys</Label>
+              <Label htmlFor="double_bogeys">Dbl Bogeys</Label>
               <Input
                 id="double_bogeys"
                 name="double_bogeys"
@@ -177,7 +178,9 @@ export function RoundForm() {
           </div>
 
           {message && (
-            <p className={`text-sm ${message.type === "success" ? "text-green-600" : "text-red-600"}`}>
+            <p
+              className={`text-sm ${message.type === "success" ? "text-green-600" : "text-red-600"}`}
+            >
               {message.text}
             </p>
           )}

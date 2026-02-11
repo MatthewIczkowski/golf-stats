@@ -1,76 +1,50 @@
 "use client";
 
-import Image from "next/image";
-import goat from "../../public/goat.jpg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Crosshair, Flag, Circle } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getPerformanceStats } from "@/lib/actions";
 
-import { PlusCircle } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
-import { ChartRadarGridCircleNoLines } from "@/components/charts/ChartRadarGridCircleNoLines";
-import { ChartLineDefault } from "@/components/charts/ChartLineDefault";
-import { DataTable } from "@/components/table/DataTable";
-import { getGolferAge } from "@/lib/utils";
-import { ModeToggle } from "@/components/ModeToggle";
-import { AuthToggle } from "@/components/AuthToggle";
+const stats = [
+  {
+    key: "avg_fairways_hit",
+    label: "Driving",
+    subtitle: "Avg Fairways",
+    icon: Flag,
+  },
+  { key: "avg_gir", label: "Approach", subtitle: "Avg GIR", icon: Crosshair },
+  { key: "avg_putts", label: "Putting", subtitle: "Avg Putts", icon: Circle },
+] as const;
 
 export default function Home() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const { years, months } = getGolferAge();
+  const [data, setData] = useState<Record<string, string | number> | null>(
+    null,
+  );
+
+  useEffect(() => {
+    getPerformanceStats().then(setData);
+  }, []);
 
   return (
     <div className="p-4 sm:p-6">
-      <div className="hidden sm:flex flex-row justify-end gap-2">
-        {isAuthenticated && (
-          <Button
-            variant="outline"
-            size="icon"
-            className="w-auto p-2 font-bold bg-emerald-700 text-white hover:bg-emerald-600 hover:text-white"
-          >
-            <PlusCircle /> New Round
-          </Button>
-        )}
-        {/* <Button variant="outline" size="icon" className="w-auto p-2" onClick={() => setIsAuthenticated(!isAuthenticated)}> Auth Logic Test </Button> */}
-        <AuthToggle isAuthenticated={isAuthenticated} />
-        {/*<ModeToggle />*/}
+      <div className="grid grid-cols-3 gap-3 sm:gap-4">
+        {stats.map(({ key, label, subtitle, icon: Icon }) => (
+          <Card key={key} className="py-2 sm:py-4 gap-2 sm:gap-6">
+            <CardHeader className="px-3 sm:px-6 pb-0 sm:pb-2 items-center sm:items-start">
+              <div className="flex items-center gap-2">
+                <Icon className="h-4 w-4 text-muted-foreground" />
+                <CardTitle className="text-sm">{label}</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="px-3 sm:px-6 text-center sm:text-left">
+              <p className="text-2xl font-bold">
+                {data ? (data[key] ?? "—") : "…"}
+              </p>
+              <p className="text-xs text-muted-foreground">{subtitle}</p>
+            </CardContent>
+          </Card>
+        ))}
       </div>
-      <section className="flex flex-row gap-4 items-center pb-4">
-        <Image src={goat} alt="goat" width={180} height={180} />
-        <section className="flex flex-col gap-2">
-          <h1 className="text-lg sm:text-2xl font-bold">
-            Iczkowski{" "}
-            <span className="text-lg sm:text-2xl text-gray-500">Matt</span>
-          </h1>
-          <p className="text-gray-500 text-sm">
-            {" "}
-            age - {years} years, {months} months
-          </p>
-          <p className="text-gray-500 text-sm"> started golf - April 2000</p>
-          <div className="flex flex-row justify-end gap-2 sm:hidden">
-            {isAuthenticated && (
-              <Button
-                variant="outline"
-                size="icon"
-                className="w-auto p-2 font-bold bg-emerald-700 text-white hover:bg-emerald-600 hover:text-white"
-              >
-                <PlusCircle /> New Round
-              </Button>
-            )}
-            {/* <Button variant="outline" size="icon" className="w-auto p-2" onClick={() => setIsAuthenticated(!isAuthenticated)}> Auth Logic Test </Button> */}
-            <AuthToggle isAuthenticated={isAuthenticated} />
-            {/*<ModeToggle />*/}
-          </div>
-        </section>
-      </section>
-      <section className="flex flex-col sm:grid sm:grid-cols-3 gap-4 pb-4 max-w-full">
-        <div className="w-full sm:col-span-2">
-          <ChartLineDefault />
-        </div>
-        <div className="sm:col-span-1">
-          <ChartRadarGridCircleNoLines />
-        </div>
-      </section>
-      <DataTable />
     </div>
   );
 }
