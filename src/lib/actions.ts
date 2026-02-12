@@ -1,5 +1,6 @@
 "use server";
 import { neon } from "@neondatabase/serverless";
+import { auth } from "@/lib/auth/server";
 
 export async function getData() {
   const sql = neon(process.env.DATABASE_URL as string);
@@ -20,6 +21,12 @@ export async function getPerformanceStats() {
 }
 
 export async function createRound(formData: FormData) {
+  const session = await auth.getSession();
+  if (!session?.data?.user?.id) {
+    throw new Error("Not authenticated");
+  }
+  const user_id = session.data.user.id;
+
   const sql = neon(process.env.DATABASE_URL as string);
 
   const date = formData.get("date") as string;
@@ -35,7 +42,7 @@ export async function createRound(formData: FormData) {
   const notes = (formData.get("notes") as string) || null;
 
   await sql`
-        INSERT INTO rounds (date, course_name, slope, rating, score, fairways_hit, greens_in_regulation, putts, penalties, double_bogeys, notes)
-        VALUES (${date}, ${course_name}, ${slope}, ${rating}, ${score}, ${fairways_hit}, ${greens_in_regulation}, ${putts}, ${penalties}, ${double_bogeys}, ${notes})
+        INSERT INTO rounds (date, course_name, slope, rating, score, fairways_hit, greens_in_regulation, putts, penalties, double_bogeys, notes, user_id)
+        VALUES (${date}, ${course_name}, ${slope}, ${rating}, ${score}, ${fairways_hit}, ${greens_in_regulation}, ${putts}, ${penalties}, ${double_bogeys}, ${notes}, ${user_id})
     `;
 }
