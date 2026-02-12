@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import goat from "../../public/goat.jpg";
 
@@ -12,6 +13,8 @@ import { authClient } from "@/lib/auth/client";
 export function MobileHeader() {
   const { data: session } = authClient.useSession();
   const isAuthenticated = !!session?.user;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <header className="flex sm:hidden items-center justify-between p-3 border-b">
@@ -22,7 +25,7 @@ export function MobileHeader() {
         </h1>
       </div>
       <div className="flex items-center gap-2">
-        {isAuthenticated && (
+        {mounted && isAuthenticated && (
           <Button
             variant="outline"
             size="icon"
@@ -31,7 +34,7 @@ export function MobileHeader() {
             <PlusCircle className="h-4 w-4" />
           </Button>
         )}
-        {isAuthenticated ? (
+        {mounted && (isAuthenticated ? (
           <Button
             variant="outline"
             size="icon"
@@ -54,7 +57,7 @@ export function MobileHeader() {
               <LogIn className="h-4 w-4" />
             </a>
           </Button>
-        )}
+        ))}
         <ModeToggle />
       </div>
     </header>

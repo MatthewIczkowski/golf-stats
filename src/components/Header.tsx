@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import goat from "../../public/goat.jpg";
 
@@ -13,12 +14,14 @@ import { authClient } from "@/lib/auth/client";
 export function Header() {
   const { data: session } = authClient.useSession();
   const isAuthenticated = !!session?.user;
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const { years, months } = getGolferAge();
 
   return (
     <header className="hidden sm:block p-4 sm:p-6">
       <div className="hidden sm:flex flex-row justify-end gap-2">
-        {isAuthenticated && (
+        {mounted && isAuthenticated && (
           <Button
             variant="outline"
             size="icon"
@@ -27,7 +30,7 @@ export function Header() {
             <PlusCircle /> New Round
           </Button>
         )}
-        {isAuthenticated ? (
+        {mounted && (isAuthenticated ? (
           <Button
             variant="outline"
             size="icon"
@@ -48,7 +51,7 @@ export function Header() {
               <LogIn />
             </a>
           </Button>
-        )}
+        ))}
         <ModeToggle />
       </div>
       <section className="flex flex-row gap-4 items-center pb-4">
