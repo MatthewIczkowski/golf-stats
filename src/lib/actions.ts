@@ -40,6 +40,33 @@ export async function getPerformanceStats() {
   return data[0];
 }
 
+export async function getMonthlyScoring() {
+  const sql = neon(process.env.DATABASE_URL as string);
+  const session = await auth.getSession();
+  const user_id = session?.data?.user?.id;
+
+  const query = user_id
+    ? sql`
+        SELECT
+          TO_CHAR(date, 'YYYY-MM') AS month,
+          ROUND(AVG(score)::numeric, 1) AS avg
+        FROM rounds
+        WHERE user_id = ${user_id}
+        GROUP BY TO_CHAR(date, 'YYYY-MM')
+        ORDER BY month
+      `
+    : sql`
+        SELECT
+          TO_CHAR(date, 'YYYY-MM') AS month,
+          ROUND(AVG(score)::numeric, 1) AS avg
+        FROM rounds
+        WHERE user_id IS NULL
+        GROUP BY TO_CHAR(date, 'YYYY-MM')
+        ORDER BY month
+      `;
+  return await query;
+}
+
 export async function createRound(formData: FormData) {
   const session = await auth.getSession();
   if (!session?.data?.user?.id) {
