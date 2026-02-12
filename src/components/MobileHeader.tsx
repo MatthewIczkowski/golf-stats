@@ -3,11 +3,10 @@
 import Image from "next/image";
 import goat from "../../public/goat.jpg";
 
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, LogIn, LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ModeToggle";
-import { UserButton } from "@neondatabase/auth/react";
 import { authClient } from "@/lib/auth/client";
 
 export function MobileHeader() {
@@ -32,7 +31,30 @@ export function MobileHeader() {
             <PlusCircle className="h-4 w-4" />
           </Button>
         )}
-        <UserButton size="icon" />
+        {isAuthenticated ? (
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8"
+            onClick={async () => {
+              await authClient.signOut();
+              window.location.href = "/";
+            }}
+          >
+            <LogOut className="h-4 w-4" />
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8"
+            asChild
+          >
+            <a href="/auth/sign-in">
+              <LogIn className="h-4 w-4" />
+            </a>
+          </Button>
+        )}
         <ModeToggle />
       </div>
     </header>

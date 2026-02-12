@@ -3,12 +3,11 @@
 import Image from "next/image";
 import goat from "../../public/goat.jpg";
 
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, LogIn, LogOut } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { getGolferAge } from "@/lib/utils";
 import { ModeToggle } from "@/components/ModeToggle";
-import { UserButton } from "@neondatabase/auth/react";
 import { authClient } from "@/lib/auth/client";
 
 export function Header() {
@@ -28,7 +27,28 @@ export function Header() {
             <PlusCircle /> New Round
           </Button>
         )}
-        <UserButton size="icon" />
+        {isAuthenticated ? (
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={async () => {
+              await authClient.signOut();
+              window.location.href = "/";
+            }}
+          >
+            <LogOut />
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            size="icon"
+            asChild
+          >
+            <a href="/auth/sign-in">
+              <LogIn />
+            </a>
+          </Button>
+        )}
         <ModeToggle />
       </div>
       <section className="flex flex-row gap-4 items-center pb-4">
