@@ -2,17 +2,18 @@
 
 import Image from "next/image";
 import goat from "../../public/goat.jpg";
-import { useState } from "react";
 
 import { PlusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { getGolferAge } from "@/lib/utils";
 import { ModeToggle } from "@/components/ModeToggle";
-import { AuthToggle } from "@/components/AuthToggle";
+import { UserButton } from "@neondatabase/auth/react";
+import { authClient } from "@/lib/auth/client";
 
 export function Header() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { data: session } = authClient.useSession();
+  const isAuthenticated = !!session?.user;
   const { years, months } = getGolferAge();
 
   return (
@@ -27,8 +28,7 @@ export function Header() {
             <PlusCircle /> New Round
           </Button>
         )}
-        {/* <Button variant="outline" size="icon" className="w-auto p-2" onClick={() => setIsAuthenticated(!isAuthenticated)}> Auth Logic Test </Button> */}
-        <AuthToggle isAuthenticated={isAuthenticated} />
+        <UserButton size="icon" />
         <ModeToggle />
       </div>
       <section className="flex flex-row gap-4 items-center pb-4">

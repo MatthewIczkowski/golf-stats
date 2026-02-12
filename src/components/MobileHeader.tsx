@@ -2,16 +2,17 @@
 
 import Image from "next/image";
 import goat from "../../public/goat.jpg";
-import { useState } from "react";
 
 import { PlusCircle } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { AuthToggle } from "@/components/AuthToggle";
 import { ModeToggle } from "@/components/ModeToggle";
+import { UserButton } from "@neondatabase/auth/react";
+import { authClient } from "@/lib/auth/client";
 
 export function MobileHeader() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { data: session } = authClient.useSession();
+  const isAuthenticated = !!session?.user;
 
   return (
     <header className="flex sm:hidden items-center justify-between p-3 border-b">
@@ -31,7 +32,7 @@ export function MobileHeader() {
             <PlusCircle className="h-4 w-4" />
           </Button>
         )}
-        <AuthToggle isAuthenticated={isAuthenticated} />
+        <UserButton size="icon" />
         <ModeToggle />
       </div>
     </header>
