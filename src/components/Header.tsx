@@ -1,10 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import goat from "../../public/goat.jpg";
-
-import { PlusCircle, LogIn, LogOut } from "lucide-react";
+import { PlusCircle, LogIn, LogOut, CircleUser } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { getGolferAge } from "@/lib/utils";
@@ -30,42 +27,31 @@ export function Header() {
             <PlusCircle /> New Round
           </Button>
         )}
-        {mounted && (isAuthenticated ? (
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={async () => {
-              await authClient.signOut();
-              window.location.href = "/";
-            }}
-          >
-            <LogOut />
-          </Button>
-        ) : (
-          <Button
-            variant="outline"
-            size="icon"
-            asChild
-          >
-            <a href="/auth/sign-in">
-              <LogIn />
-            </a>
-          </Button>
-        ))}
+        {mounted &&
+          (isAuthenticated ? (
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={async () => {
+                await authClient.signOut();
+                window.location.href = "/";
+              }}
+            >
+              <LogOut />
+            </Button>
+          ) : (
+            <Button variant="outline" size="icon" asChild>
+              <a href="/auth/sign-in">
+                <LogIn />
+              </a>
+            </Button>
+          ))}
         <ModeToggle />
       </div>
       <section className="flex flex-row gap-4 items-center pb-4">
-        <Image src={goat} alt="goat" width={180} height={180} />
+        <CircleUser className="h-[180px] w-[180px] text-muted-foreground" />
         <section className="flex flex-col gap-2">
-          <h1 className="text-lg sm:text-2xl font-bold">
-            Iczkowski{" "}
-            <span className="text-lg sm:text-2xl text-gray-500">Matt</span>
-          </h1>
-          <p className="text-gray-500 text-sm">
-            {" "}
-            age - {years} years, {months} months
-          </p>
-          <p className="text-gray-500 text-sm"> started golf - April 2000</p>
+          <h1 className="text-lg sm:text-2xl font-bold">{session?.user?.name ?? "Guest"}</h1>
         </section>
       </section>
     </header>
