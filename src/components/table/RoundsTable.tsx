@@ -19,6 +19,7 @@ interface Round {
   slope: string | number;
   rating: string | number;
   score: string | number;
+  user_id: string | null;
 }
 
 function formatDate(date: string | Date): string {
@@ -31,7 +32,7 @@ function formatDate(date: string | Date): string {
   });
 }
 
-export function DataTable() {
+export function RoundsTable() {
   const [rounds, setRounds] = useState<Round[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -78,10 +79,11 @@ export function DataTable() {
       <TableHeader>
         <TableRow>
           {/*<TableHead className="w-[100px] font-bold">UUID</TableHead>*/}
+          <TableHead className="font-bold">User ID</TableHead>
           <TableHead className="font-bold">Date</TableHead>
           <TableHead className="font-bold">Course</TableHead>
-          {/*<TableHead className="font-bold">Slope</TableHead>*/}
-          {/*<TableHead className="font-bold">Rating</TableHead>*/}
+          <TableHead className="font-bold">Slope</TableHead>
+          <TableHead className="font-bold">Rating</TableHead>
           <TableHead className="text-right font-bold">Score</TableHead>
         </TableRow>
       </TableHeader>
@@ -96,10 +98,11 @@ export function DataTable() {
           rounds.map((round, index) => (
             <TableRow key={round.id || `round-${index}`}>
               {/*<TableCell className="font-medium">{round.id}</TableCell>*/}
+              <TableCell>{round.user_id ?? "—"}</TableCell>
               <TableCell>{formatDate(round.date)}</TableCell>
               <TableCell>{round.course_name}</TableCell>
-              {/*<TableCell>{round.slope}</TableCell>*/}
-              {/*<TableCell>{round.rating}</TableCell>*/}
+              <TableCell>{round.slope}</TableCell>
+              <TableCell>{round.rating}</TableCell>
               <TableCell className="text-right">{round.score}</TableCell>
             </TableRow>
           ))
@@ -107,8 +110,8 @@ export function DataTable() {
       </TableBody>
       <TableFooter>
         <TableRow>
-          <TableCell colSpan={2} className="font-bold">
-            Average
+          <TableCell colSpan={5} className="font-bold">
+            Score Average
           </TableCell>
           <TableCell className="text-right">{average}</TableCell>
         </TableRow>

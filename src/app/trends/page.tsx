@@ -15,7 +15,6 @@ export default function Trends() {
           <ChartRadarGridCircleNoLines />
         </div>
       </section>
-      <DataTable />
     </div>
   );
 }
