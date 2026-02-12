@@ -15,7 +15,7 @@ export function Footer() {
   const pathname = usePathname();
 
   return (
-    <footer className="fixed bottom-0 left-0 right-0 z-50 h-14 border-t bg-background/80 backdrop-blur-sm">
+    <footer className="fixed bottom-2 left-2 right-2 z-50 h-14 rounded-2xl border bg-background/80 backdrop-blur-sm">
       <nav className="flex h-full items-center justify-around">
         {links.map(({ href, label, icon: Icon }) => {
           const active = pathname === href;
@@ -24,7 +24,7 @@ export function Footer() {
               key={href}
               href={href}
               className={cn(
-                "flex flex-col items-center gap-0.5 text-xs transition-colors",
+                "relative flex flex-col items-center gap-0.5 text-xs transition-colors",
                 active
                   ? "text-foreground font-semibold"
                   : "text-muted-foreground hover:text-foreground"
@@ -32,6 +32,9 @@ export function Footer() {
             >
               <Icon className="h-5 w-5" />
               {label}
+              {active && (
+                <span className="absolute -bottom-1.5 h-0.5 w-6 rounded-full bg-foreground" />
+              )}
             </Link>
           );
         })}
