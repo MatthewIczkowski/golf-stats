@@ -4,18 +4,38 @@ import { auth } from "@/lib/auth/server";
 
 export async function getData() {
   const sql = neon(process.env.DATABASE_URL as string);
-  const data = await sql`SELECT * FROM rounds ORDER BY date DESC`;
-  return data;
+  const session = await auth.getSession();
+  const user_id = session?.data?.user?.id;
+
+  if (user_id) {
+    return await sql`SELECT * FROM rounds WHERE user_id = ${user_id} ORDER BY date DESC`;
+  }
+  return await sql`SELECT * FROM rounds WHERE user_id IS NULL ORDER BY date DESC`;
 }
 
 export async function getPerformanceStats() {
   const sql = neon(process.env.DATABASE_URL as string);
+  const session = await auth.getSession();
+  const user_id = session?.data?.user?.id;
+
+  if (user_id) {
+    const data = await sql`
+      SELECT
+        ROUND(AVG(fairways_hit)::numeric, 1) AS avg_fairways_hit,
+        ROUND(AVG(greens_in_regulation)::numeric, 1) AS avg_gir,
+        ROUND(AVG(putts)::numeric, 1) AS avg_putts
+      FROM rounds
+      WHERE user_id = ${user_id}
+    `;
+    return data[0];
+  }
   const data = await sql`
     SELECT
       ROUND(AVG(fairways_hit)::numeric, 1) AS avg_fairways_hit,
       ROUND(AVG(greens_in_regulation)::numeric, 1) AS avg_gir,
       ROUND(AVG(putts)::numeric, 1) AS avg_putts
     FROM rounds
+    WHERE user_id IS NULL
   `;
   return data[0];
 }
