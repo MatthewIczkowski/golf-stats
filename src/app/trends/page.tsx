@@ -2,7 +2,6 @@
 
 import { ChartRadarGridCircleNoLines } from "@/components/charts/ChartRadarGridCircleNoLines";
 import { ChartLineDefault } from "@/components/charts/ChartLineDefault";
-import { DataTable } from "@/components/table/DataTable";
 
 export default function Trends() {
   return (
