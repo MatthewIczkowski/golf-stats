@@ -40,7 +40,7 @@ export function ScoreTrendChart() {
     getMonthlyScoring()
       .then((data) =>
         setChartData(
-          data.map((row: { month: string; avg: string | number }) => ({
+          data.map((row) => ({
             month: row.month,
             avg: Number(row.avg),
           }))
