@@ -5,5 +5,4 @@ export const auth = createNeonAuth({
   cookies: {
     secret: process.env.NEON_AUTH_COOKIE_SECRET!,
   },
-  trustedOrigins: ["https://golf.matticz.com"],
 });
