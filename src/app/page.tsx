@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Crosshair, Flag, Circle } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getPerformanceStats } from "@/lib/actions";
+import UpcomingTeeTimes from "@/components/UpcomingTeeTimes";
 
 const stats = [
   {
@@ -44,6 +45,9 @@ export default function Home() {
             </CardContent>
           </Card>
         ))}
+      </div>
+      <div className="mt-4 sm:mt-6">
+        <UpcomingTeeTimes />
       </div>
     </div>
   );
