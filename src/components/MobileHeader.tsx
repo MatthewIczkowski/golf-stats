@@ -6,6 +6,7 @@ import { PlusCircle, LogIn, LogOut, CircleUser } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ModeToggle } from "@/components/ModeToggle";
 import { authClient } from "@/lib/auth/client";
+import { NewRoundModal } from "@/components/forms/NewRoundModal";
 
 export function MobileHeader() {
   const { data: session } = authClient.useSession();
@@ -21,13 +22,15 @@ export function MobileHeader() {
       </div>
       <div className="flex items-center gap-2">
         {mounted && isAuthenticated && (
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-8 w-8 bg-emerald-700 text-white hover:bg-emerald-600 hover:text-white"
-          >
-            <PlusCircle className="h-4 w-4" />
-          </Button>
+          <NewRoundModal>
+            <Button
+              variant="outline"
+              size="icon"
+              className="h-8 w-8 bg-emerald-700 text-white hover:bg-emerald-600 hover:text-white"
+            >
+              <PlusCircle className="h-4 w-4" />
+            </Button>
+          </NewRoundModal>
         )}
         {mounted &&
           (isAuthenticated ? (

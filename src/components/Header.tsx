@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { getGolferAge } from "@/lib/utils";
 import { ModeToggle } from "@/components/ModeToggle";
 import { authClient } from "@/lib/auth/client";
+import { NewRoundModal } from "@/components/forms/NewRoundModal";
 
 export function Header() {
   const { data: session } = authClient.useSession();
@@ -19,13 +20,15 @@ export function Header() {
     <header className="hidden sm:block p-4 sm:p-6">
       <div className="hidden sm:flex flex-row justify-end gap-2">
         {mounted && isAuthenticated && (
-          <Button
-            variant="outline"
-            size="icon"
-            className="w-auto p-2 font-bold bg-emerald-700 text-white hover:bg-emerald-600 hover:text-white"
-          >
-            <PlusCircle /> New Round
-          </Button>
+          <NewRoundModal>
+            <Button
+              variant="outline"
+              size="icon"
+              className="w-auto p-2 font-bold bg-emerald-700 text-white hover:bg-emerald-600 hover:text-white"
+            >
+              <PlusCircle /> New Round
+            </Button>
+          </NewRoundModal>
         )}
         {mounted &&
           (isAuthenticated ? (
