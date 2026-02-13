@@ -1,6 +1,5 @@
 "use client"
 
-import { useEffect, useState } from "react"
 import { TrendingDown, TrendingUp, Minus } from "lucide-react"
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts"
 
@@ -17,7 +16,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
-import { getMonthlyScoring } from "@/lib/actions"
 
 const chartConfig = {
   desktop: {
@@ -32,23 +30,8 @@ function formatMonth(yyyyMm: string): string {
   return date.toLocaleDateString("en-US", { month: "short", year: "2-digit" })
 }
 
-export function ScoreTrendChart() {
-  const [chartData, setChartData] = useState<{ month: string; avg: number }[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    getMonthlyScoring()
-      .then((data) =>
-        setChartData(
-          data.map((row) => ({
-            month: row.month,
-            avg: Number(row.avg),
-          }))
-        )
-      )
-      .catch(console.error)
-      .finally(() => setIsLoading(false))
-  }, [])
+export function ScoreTrendChart({ data }: { data: { month: string; avg: number }[] }) {
+  const chartData = data
 
   const trend = (() => {
     if (chartData.length < 2) return null
@@ -66,16 +49,14 @@ export function ScoreTrendChart() {
     }
   })()
 
-  if (isLoading || chartData.length === 0) {
+  if (chartData.length === 0) {
     return (
       <Card className="max-w-full h-full flex flex-col">
         <CardHeader>
           <CardTitle>Scoring Average</CardTitle>
         </CardHeader>
         <CardContent className="flex-1 flex items-center justify-center">
-          <p className="text-muted-foreground text-sm">
-            {isLoading ? "Loading..." : "No data available"}
-          </p>
+          <p className="text-muted-foreground text-sm">No data available</p>
         </CardContent>
       </Card>
     )

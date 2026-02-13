@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -10,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getData } from "@/lib/actions";
 
 interface Round {
   id: string;
@@ -32,46 +30,16 @@ function formatDate(date: string | Date): string {
   });
 }
 
-export function RoundsTable() {
-  const [rounds, setRounds] = useState<Round[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    async function fetchRounds() {
-      try {
-        const data = await getData();
-        setRounds(data as Round[]);
-      } catch (error) {
-        console.error("Error fetching rounds:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-    fetchRounds();
-  }, []);
+export function RoundsTable({ rounds }: { rounds: Round[] | Record<string, unknown>[] }) {
+  const typedRounds = rounds as Round[];
 
   const average =
-    rounds.length > 0
+    typedRounds.length > 0
       ? (
-          rounds.reduce((sum, round) => sum + Number(round.score), 0) /
-          rounds.length
+          typedRounds.reduce((sum, round) => sum + Number(round.score), 0) /
+          typedRounds.length
         ).toFixed(1)
       : "0.0";
-
-  if (isLoading) {
-    return (
-      <Table>
-        {/*<TableCaption>A list of recent scores.</TableCaption>*/}
-        <TableBody>
-          <TableRow key="loading">
-            <TableCell colSpan={2} className="text-center">
-              Loading...
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    );
-  }
 
   return (
     <Table>
@@ -88,14 +56,14 @@ export function RoundsTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {rounds.length === 0 ? (
+        {typedRounds.length === 0 ? (
           <TableRow key="empty-state">
             <TableCell colSpan={2} className="text-center">
               No rounds found
             </TableCell>
           </TableRow>
         ) : (
-          rounds.map((round, index) => (
+          typedRounds.map((round, index) => (
             <TableRow key={round.id || `round-${index}`}>
               {/*<TableCell className="font-medium">{round.id}</TableCell>*/}
               <TableCell>{round.user_id ?? "—"}</TableCell>
