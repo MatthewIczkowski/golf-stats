@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,20 +10,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { authClient } from "@/lib/auth/client";
+import { createRound } from "@/lib/actions";
 
 export function NewRoundModal({ children }: { children: React.ReactNode }) {
-  const { data: session } = authClient.useSession();
+  const [open, setOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const router = useRouter();
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
-    console.log("Form data:", { ...data, user_id: session?.user?.id ?? null });
+    setSubmitting(true);
+    try {
+      const formData = new FormData(e.currentTarget);
+      await createRound(formData);
+      setOpen(false);
+      router.refresh();
+    } catch (err) {
+      console.error("Failed to create round:", err);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -31,7 +43,7 @@ export function NewRoundModal({ children }: { children: React.ReactNode }) {
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1">
               <label htmlFor="date" className="text-sm font-medium">Date</label>
-              <input type="date" name="date" id="date" defaultValue={new Date().toISOString().split("T")[0]} required className="w-full rounded-md border bg-transparent px-3 py-2 text-sm" />
+              <input type="date" name="date" id="date" defaultValue={new Date().toLocaleDateString("en-CA")} required className="w-full rounded-md border bg-transparent px-3 py-2 text-sm" />
             </div>
             <div className="space-y-1">
               <label htmlFor="course_name" className="text-sm font-medium">Course</label>
@@ -74,7 +86,9 @@ export function NewRoundModal({ children }: { children: React.ReactNode }) {
             <label htmlFor="notes" className="text-sm font-medium">Notes</label>
             <textarea name="notes" id="notes" defaultValue="Solid round" rows={2} className="w-full rounded-md border bg-transparent px-3 py-2 text-sm" />
           </div>
-          <Button type="submit" className="w-full">Log Form Data</Button>
+          <Button type="submit" disabled={submitting} className="w-full">
+            {submitting ? "Saving..." : "Save Round"}
+          </Button>
         </form>
       </DialogContent>
     </Dialog>
