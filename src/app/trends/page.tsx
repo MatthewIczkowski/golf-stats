@@ -2,6 +2,8 @@ import { ChartRadarGridCircleNoLines } from "@/components/charts/ChartRadarGridC
 import { ScoreTrendChart } from "@/components/charts/ScoreTrendChart";
 import { getMonthlyScoring } from "@/lib/actions";
 
+export const dynamic = "force-dynamic";
+
 export default async function Trends() {
   const rawData = await getMonthlyScoring();
   const data = rawData.map((row) => ({

@@ -1,6 +1,8 @@
 import { RoundsTable } from "@/components/table/RoundsTable";
 import { getData } from "@/lib/actions";
 
+export const dynamic = "force-dynamic";
+
 export default async function Rounds() {
   const rounds = await getData();
 

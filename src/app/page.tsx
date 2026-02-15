@@ -2,6 +2,8 @@ import { getPerformanceStats } from "@/lib/actions";
 import { StatCards } from "@/components/StatCards";
 import UpcomingTeeTimes from "@/components/UpcomingTeeTimes";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   const data = await getPerformanceStats();
 
